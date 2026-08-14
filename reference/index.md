@@ -1,0 +1,35 @@
+# Package index
+
+## Single-case effect size & analysis
+
+- [`nap()`](https://x-biosignal.github.io/PhysioAppKit/reference/nap.md)
+  : Nonoverlap of All Pairs (NAP)
+- [`interpret_nap()`](https://x-biosignal.github.io/PhysioAppKit/reference/interpret_nap.md)
+  : Interpret a NAP value (Parker & Vannest 2009 bands)
+- [`nonoverlap_analyze()`](https://x-biosignal.github.io/PhysioAppKit/reference/nonoverlap_analyze.md)
+  : Single-case A-vs-B analysis: NAP + threshold verdict + decision band
+
+## Reasoning & plot
+
+- [`combine_verdicts()`](https://x-biosignal.github.io/PhysioAppKit/reference/combine_verdicts.md)
+  : Combine per-item verdicts into an honest overall
+  (supported/partial/refuted)
+- [`phase_plot()`](https://x-biosignal.github.io/PhysioAppKit/reference/phase_plot.md)
+  : Generic single-case phase plot (A vs B, decision band, threshold
+  line)
+
+## Ordinal to interval (Rasch)
+
+- [`rasch_measure()`](https://x-biosignal.github.io/PhysioAppKit/reference/rasch_measure.md)
+  : Fit a dichotomous Rasch model by JMLE (ordinal -\> interval)
+- [`raw_score_measure()`](https://x-biosignal.github.io/PhysioAppKit/reference/raw_score_measure.md)
+  : Raw-score -\> Rasch-measure conversion table for a calibrated item
+  set
+
+## Utilities
+
+- [`rbind_fill()`](https://x-biosignal.github.io/PhysioAppKit/reference/rbind_fill.md)
+  : Row-bind two data.frames with differing columns (fill missing with
+  NA)
+- [`first_last()`](https://x-biosignal.github.io/PhysioAppKit/reference/first_last.md)
+  : First and last non-NA of a vector
