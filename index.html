@@ -46,8 +46,99 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-A small, domain-neutral engine for single-case (N-of-1) analysis shared by physiological application layers (rehabilitation, sport, psychophysiology, and others). Provides the Nonoverlap of All Pairs (NAP) effect size, a threshold-and-band single-case analysis, a phase plot, an honest hypothesis-to-evidence verdict combiner, and a dependency-free Rasch model for turning ordinal ratings into an interval scale. Application layers supply their domain slots (ontology, threshold, goal, reasoning, report) and call this engine; the engine knows nothing about any specific domain.
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="physioappkit">PhysioAppKit<a class="anchor" aria-label="anchor" href="#physioappkit"></a>
+</h1></div>
+<p><strong>A domain-neutral engine for single-case (N-of-1) analysis in the x-biosignal ecosystem.</strong></p>
+<p>Application layers for different fields — rehabilitation, sport science, psychophysiology, and others — share the same single-case machinery: a distribution-free effect size, a threshold-and-band decision rule, a phase plot, an honest hypothesis-to-evidence verdict, and a way to turn ordinal ratings into an interval scale. PhysioAppKit provides that machinery once and knows nothing about any specific domain; each application layer supplies its own semantics (ontology, threshold, goal, reasoning, report) and calls this engine.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"PhysioAppKit"</span>, repos <span class="op">=</span> <span class="st">"https://x-biosignal.r-universe.dev"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/x-biosignal/PhysioAppKit" class="external-link">PhysioAppKit</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Nonoverlap of All Pairs (NAP): a distribution-free single-case effect size.</span></span>
+<span><span class="fu"><a href="reference/nap.html">nap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.41</span>, <span class="fl">0.39</span>, <span class="fl">0.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.46</span>, <span class="fl">0.55</span>, <span class="fl">0.66</span><span class="op">)</span>, <span class="st">"increase"</span><span class="op">)</span>   <span class="co"># 1</span></span>
+<span></span>
+<span><span class="co"># Single-case A-vs-B analysis: NAP + a meaningful threshold + a decision band.</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nonoverlap_analyze.html">nonoverlap_analyze</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.41</span>, <span class="fl">0.39</span>, <span class="fl">0.43</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.46</span>, <span class="fl">0.55</span>, <span class="fl">0.66</span><span class="op">)</span>,</span>
+<span>                        threshold <span class="op">=</span> <span class="fl">0.16</span>, direction <span class="op">=</span> <span class="st">"increase"</span><span class="op">)</span></span>
+<span><span class="va">a</span><span class="op">$</span><span class="va">nap</span>               <span class="co"># 1</span></span>
+<span><span class="va">a</span><span class="op">$</span><span class="va">beyond_threshold</span>  <span class="co"># TRUE  (the change exceeds the threshold)</span></span>
+<span></span>
+<span><span class="co"># Rasch: turn ordinal item responses into an interval (logit) scale, so that</span></span>
+<span><span class="co"># equal raw-score steps are not mistaken for equal real change.</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rasch_measure.html">rasch_measure</a></span><span class="op">(</span><span class="va">responses</span><span class="op">)</span>   <span class="co"># persons x items 0/1 matrix</span></span>
+<span><span class="fu"><a href="reference/raw_score_measure.html">raw_score_measure</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span>      <span class="co"># raw score -&gt; interval measure</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="what-it-provides">What it provides<a class="anchor" aria-label="anchor" href="#what-it-provides"></a>
+</h2>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+<code><a href="reference/nap.html">nap()</a></code>, <code><a href="reference/interpret_nap.html">interpret_nap()</a></code>
+</td>
+<td>Nonoverlap of All Pairs effect size and interpretive bands.</td>
+</tr>
+<tr>
+<td><code><a href="reference/nonoverlap_analyze.html">nonoverlap_analyze()</a></code></td>
+<td>Single-case A-vs-B analysis: NAP, threshold verdict, decision band.</td>
+</tr>
+<tr>
+<td><code><a href="reference/combine_verdicts.html">combine_verdicts()</a></code></td>
+<td>Combine per-item results into an honest supported / partial / refuted verdict.</td>
+</tr>
+<tr>
+<td><code><a href="reference/phase_plot.html">phase_plot()</a></code></td>
+<td>A single-case phase plot (baseline vs. intervention, band, threshold line).</td>
+</tr>
+<tr>
+<td>
+<code><a href="reference/rasch_measure.html">rasch_measure()</a></code>, <code><a href="reference/raw_score_measure.html">raw_score_measure()</a></code>
+</td>
+<td>Dependency-free dichotomous Rasch (ordinal → interval).</td>
+</tr>
+<tr>
+<td>
+<code><a href="reference/rbind_fill.html">rbind_fill()</a></code>, <code><a href="reference/first_last.html">first_last()</a></code>
+</td>
+<td>Small container utilities.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="used-by">Used by<a class="anchor" aria-label="anchor" href="#used-by"></a>
+</h2>
+<p>Application layers implement their five domain slots and call this engine — for example <strong>PhysioRehab</strong> (rehabilitation: ICF semantics, MCID threshold, goal-attainment scaling).</p>
+</div>
+<div class="section level2">
+<h2 id="relationship-to-physioclinstats">Relationship to PhysioClinStats<a class="anchor" aria-label="anchor" href="#relationship-to-physioclinstats"></a>
+</h2>
+<p>The <code><a href="reference/nap.html">nap()</a></code> here is a lightweight numeric entry point for orchestration; it is verified to agree with the provenance-tracked <code><a href="https://x-biosignal.github.io/PhysioClinStats/reference/scedNAP.html" class="external-link">PhysioClinStats::scedNAP</a></code>, so the two never diverge.</p>
+</div>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>MIT. See <code>CITATION.cff</code> for citation details.</p>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
