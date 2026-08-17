@@ -1,0 +1,18 @@
+url: https://x-biosignal.github.io/PhysioAppKit/
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#2c3e50"
+navbar:
+  structure:
+    left: [reference, news]
+    right: [search, github]
+reference:
+- title: Single-case effect size & analysis
+  contents: [nap, interpret_nap, nonoverlap_analyze]
+- title: Reasoning & plot
+  contents: [combine_verdicts, phase_plot]
+- title: Ordinal to interval (Rasch)
+  contents: [rasch_measure, raw_score_measure]
+- title: Utilities
+  contents: [rbind_fill, first_last]
