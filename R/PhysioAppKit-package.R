@@ -1,0 +1,44 @@
+#' PhysioAppKit: Domain-Neutral Single-Case Engine for Physiological Application Layers
+#'
+#' A small, dependency-light engine for single-case (N-of-1) analysis shared by
+#' physiological application layers (rehabilitation, sport, psychophysiology, and
+#' others). It operates on plain numeric vectors and generic "group A vs group B"
+#' contrasts and knows nothing about any specific domain: an application layer
+#' supplies the domain slots (ontology, threshold, goal, reasoning, report) and
+#' calls these functions.
+#'
+#' @section Single-case effect size and verdicts:
+#' \itemize{
+#'   \item \code{\link{nap}}, \code{\link{interpret_nap}} -- Nonoverlap of All
+#'     Pairs effect size and its interpretation band.
+#'   \item \code{\link{nonoverlap_analyze}} -- NAP plus a threshold verdict and
+#'     decision band (the shared math behind a rehab MCID, a sport SWC or a
+#'     psychophysiology SESOI contrast).
+#'   \item \code{\link{phase_plot}} -- a generic A-vs-B single-case phase plot.
+#'   \item \code{\link{combine_verdicts}} -- combine per-item verdicts into an
+#'     honest overall supported / partial / refuted.
+#' }
+#'
+#' @section Rasch measurement (ordinal to interval):
+#' \itemize{
+#'   \item \code{\link{rasch_measure}}, \code{\link{raw_score_measure}} -- the
+#'     dichotomous Rasch model (JMLE) and its raw-score-to-measure table.
+#'   \item \code{\link{pcm_measure}}, \code{\link{poly_raw_measure}} -- the
+#'     polytomous (Partial Credit / Rating Scale) Rasch model and its conversion.
+#'   \item \code{\link{pcm_stack}} -- concurrent (stacked) calibration so
+#'     repeated measures sit on one common interval scale.
+#'   \item \code{\link{pcm_dif}} -- differential item functioning between groups.
+#' }
+#'
+#' @section Small helpers:
+#' \itemize{
+#'   \item \code{\link{rbind_fill}}, \code{\link{first_last}}.
+#' }
+#'
+#' @section Where to go next:
+#' See \code{vignette("PhysioAppKit")} for an end-to-end single-case workflow.
+#' Application layers (for example PhysioRehab) wrap these functions with their
+#' own domain ontology, thresholds and reporting.
+#'
+#' @keywords internal
+"_PACKAGE"

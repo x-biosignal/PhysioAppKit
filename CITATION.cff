@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "PhysioAppKit: Domain-Neutral Single-Case Engine for Physiological Application Layers"
+type: software
+authors:
+  - family-names: Matsui
+    given-names: Yusuke
+    email: mail.to.matsui@gmail.com
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/x-biosignal/PhysioAppKit"
+url: "https://x-biosignal.github.io/PhysioAppKit"

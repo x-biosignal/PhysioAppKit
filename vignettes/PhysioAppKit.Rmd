@@ -1,0 +1,101 @@
+---
+title: "Single-case analysis with PhysioAppKit"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Single-case analysis with PhysioAppKit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 4)
+```
+
+PhysioAppKit is a small, domain-neutral engine for single-case (N-of-1)
+analysis. It works on plain numeric vectors and generic "group A vs group B"
+contrasts; a domain application layer (rehabilitation, sport,
+psychophysiology, ...) supplies the ontology, thresholds and reporting and calls
+these functions. This vignette walks the two things the engine does: a
+single-case effect-size + verdict, and ordinal-to-interval Rasch measurement.
+Everything runs offline on tiny synthetic data.
+
+```{r setup}
+library(PhysioAppKit)
+```
+
+## A single-case A-vs-B contrast
+
+Suppose a baseline phase (A) of repeated observations is followed by an
+intervention phase (B), and a change of `threshold` units is the smallest that
+matters (an MCID in rehab, an SWC in sport, a SESOI in psychophysiology).
+
+```{r analyze}
+baseline     <- c(10, 11, 9, 10, 10)
+intervention <- c(12, 13, 14, 15)
+
+res <- nonoverlap_analyze(baseline, intervention, threshold = 2,
+                          direction = "increase")
+c(nap = res$nap, interpretation = res$interpretation,
+  beyond_threshold = res$beyond_threshold)
+```
+
+`nap()` is the Nonoverlap of All Pairs effect size (0.5 = complete overlap / no
+effect, 1 = every B point beats every A point), and `interpret_nap()` bands it:
+
+```{r nap}
+nap(baseline, intervention)
+interpret_nap(res$nap)
+```
+
+A phase plot shows the two phases against the baseline decision band and the
+threshold line:
+
+```{r plot}
+y <- c(baseline, intervention)
+phase_plot(x = seq_along(y), y = y,
+           a_idx = seq_along(baseline),
+           b_idx = length(baseline) + seq_along(intervention),
+           center = res$baseline_mean, lo = res$band_lo, hi = res$band_hi,
+           thr = res$baseline_mean + res$threshold, thr_lab = "threshold",
+           ylab = "outcome", main = "Single-case phase plot",
+           a_lab = "Baseline", b_lab = "Intervention")
+```
+
+When several outcomes are each judged separately, `combine_verdicts()` reduces
+them to one honest overall label (all supported, some supported, or none):
+
+```{r verdicts}
+combine_verdicts(list(
+  list(supported = res$beyond_threshold),
+  list(supported = TRUE),
+  list(supported = NA)      # inconclusive
+))
+```
+
+## Ordinal ratings to an interval scale (Rasch)
+
+A raw sum of ordinal items is not an interval scale: equal raw gains mean
+different real gains at different score levels. The dichotomous Rasch model
+calibrates item difficulties and places each person on a linear (logit) scale.
+
+```{r rasch}
+set.seed(1)
+ability    <- rnorm(40)
+difficulty <- c(-1.5, -0.5, 0, 0.5, 1.5)
+responses  <- sapply(difficulty, function(d) rbinom(40, 1, plogis(ability - d)))
+
+fit <- rasch_measure(responses)
+round(fit$delta, 2)        # calibrated item difficulties (centred logits)
+```
+
+The raw-score-to-measure table exposes the non-linear ogive --- equal raw-score
+steps are unequal logit steps, largest near the floor and ceiling:
+
+```{r ogive}
+raw_score_measure(fit$delta)
+```
+
+For ordered-category (polytomous) scales --- ICF qualifiers, Likert, the Barthel
+Index --- use `pcm_measure()` (Partial Credit / Rating Scale models) and
+`poly_raw_measure()`; `pcm_stack()` calibrates repeated measures onto one common
+scale. See `?PhysioAppKit` for the full map.
